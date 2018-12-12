@@ -1,9 +1,22 @@
 import boto3
+import click
 
-# Listing EC2 instances available in my environment
-if __name__ == '__main__':
-    session = boto3.Session(profile_name='shotty')
-    ec2 = session.resource('ec2')
+session = boto3.Session(profile_name='shotty')
+ec2 = session.resource('ec2')
 
+
+# Defining function to list all instances for your access
+@click.command()
+def list_instances():
+    "List EC2 instances"
     for i in ec2.instances.all():
-        print(i)
+        print(', '.join((
+            i.id,
+            i.instance_type,
+            i.placement['AvailabilityZone'],
+            i.state['Name'],
+            i.public_dns_name)))
+
+# Best practice to call function in main body of the script
+if __name__ == '__main__':
+    list_instances()
