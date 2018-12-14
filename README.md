@@ -19,4 +19,5 @@ shotty
 `pipenv run "python shotty/shotty.py <command> <--project=PROJECT>"`
 
 *Command* is list, start, stop
+
 *Project* is optional 
