@@ -1,4 +1,5 @@
 import boto3
+import botocore
 import click
 
 # Retriving session info from the profile created through AWS-CLI
@@ -138,7 +139,11 @@ def stop_instances(project):
 
     for i in instances:
         print("Stopping {0}...".format(i.id))
-        i.stop()
+        try:
+            i.stop()
+        except botocore.exceptions.ClientError as e:
+            print ("Couldn't stop {0}. ".format(i.id) + str(e))
+            continue
 
     return
 
@@ -154,7 +159,11 @@ def start_instances(project):
 
     for i in instances:
         print("Starting {0}...".format(i.id))
-        i.start()
+        try:
+            i.start()
+        except botocore.exceptions.ClientError as e:
+            print("Couldn't start intance {0}. ".format(i.id) + str(e))
+            continue
 
     return
 
