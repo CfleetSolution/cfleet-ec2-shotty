@@ -18,6 +18,10 @@ def filter_instances(project):
 
     return instances
 
+def has_snapshot_in_progress(volume):
+    snapshots = list(volume.snapshots.all())
+    return snapshots and snapshots[0].state == 'pending'
+
 # Grouping mulitiple operations of EC2 instances
 @click.group()
 def cli():
@@ -121,6 +125,10 @@ def create_snapshots(project):
         i.stop()
         i.wait_until_stopped()
         for v in i.volumes.all():
+            if has_snapshot_in_progress(v):
+                print (" Skipping snapshot of volume {0}, already in progress".format(v.id))
+                continue
+
             print(" Creating snapshot of {0}...".format(v.id))
             v.create_snapshot(Description = "Created by Cfleet SnapshotsAlyzer!")
 
@@ -129,6 +137,7 @@ def create_snapshots(project):
         i.start()
         i.wait_until_running()
 
+    print("Job's done!")
     return
 
 @instances.command('stop')
