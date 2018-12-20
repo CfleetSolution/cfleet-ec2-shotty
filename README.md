@@ -18,8 +18,8 @@ shotty
 
 `pipenv run "python shotty/shotty.py <command> <subcommand> <--project=PROJECT>"`
 
-*Command* is instances, volumes, snapshots
+*Command* is instances, volumes, or snapshots
 
-*Subcommand* is list, start, stop
+*Subcommand* - Depends on command
 
 *Project* is optional parameter
